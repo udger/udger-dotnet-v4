@@ -30,5 +30,10 @@ namespace Udger.Parser.Input
 
         [NamePosition(8, Name = "ua")]
         public string Ua { get; set; }
+
+        public string cacheCode()
+        {
+            return $"{SecChUa} + {SecChUaFullVersionList} + {SecChUaMobile} + {SecChUaFullVersion} + {SecChUaPlatform} +  {SecChUaPlatformVersion} + {SecChUaModel}+ {Ua}";
+        }
     }
 }

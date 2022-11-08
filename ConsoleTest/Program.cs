@@ -69,6 +69,13 @@ User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 
             parser.parse();
 
+            parser.header.SecChUaFullVersionList = @"""Chromium"";v=""104.0.5112.102"", "" Not A;Brand"";v=""99.0.0.0"", ""Google Chrome"";v=""104.0.5112.102""";
+            parser.header.SecChUaMobile = @"?0";
+            parser.header.SecChUaPlatform = @"""Windows""";
+            parser.header.SecChUaPlatformVersion = @"""14.0.0""";
+
+            parser.parse();
+
             parser.header.SecChUa = @"""Chromium"";v=""104"", "" Not A; Brand"";v=""99"", ""Google Chrome"";v=""104""";
             parser.header.SecChUaMobile = @"?0";
             parser.header.SecChUaFullVersion = @"""97.0.4692.71""";

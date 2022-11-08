@@ -46,6 +46,7 @@ namespace Udger.Parser
         }
 
         private LRUCache<string, UserAgent> cache;
+        private LRUCache<string, UserAgent> headerCache;
         private bool useCache;
         private DataReader dt;
         private static WordDetector clientWordDetector;
@@ -71,6 +72,7 @@ namespace Udger.Parser
             this.ip = "";
             this.useCache = true;
             cache = new LRUCache<string, UserAgent>(10000);
+            headerCache = new LRUCache<string, UserAgent>(10000);
             header = new Header();
 
         }
@@ -78,13 +80,14 @@ namespace Udger.Parser
         /// Constructor
         /// </summary> 
         /// <param name="LRUCashCapacity">int LRUCash Capacity (minimum is 1)</param>
-        public UdgerParser(int LRUCashCapacity = 10000)
+        public UdgerParser(int LRUCashCapacity)
         {
             dt = new DataReader();
             this.ua = "";
             this.ip = "";
             this.useCache = true;
             cache = new LRUCache<string, UserAgent>(LRUCashCapacity);
+            headerCache = new LRUCache<string, UserAgent>(LRUCashCapacity);
             header = new Header();
 
         }
@@ -93,12 +96,15 @@ namespace Udger.Parser
         /// </summary>
         /// <param name="useLRUCash">bool eneble/disable LRUCash</param>
         /// <param name="LRUCashCapacity">int LRUCash Capacity (minimum is 1)</param>
-        public UdgerParser(bool useLRUCash = true, int LRUCashCapacity = 10000)
+        public UdgerParser(bool useLRUCash, int LRUCashCapacity)
         {
             this.ua = "";
             this.ip = "";
             if (useLRUCash)
+            {
                 cache = new LRUCache<string, UserAgent>(LRUCashCapacity);
+                headerCache = new LRUCache<string, UserAgent>(LRUCashCapacity);
+            }
 
             this.useCache = useLRUCash;
             dt = new DataReader();
@@ -184,7 +190,10 @@ namespace Udger.Parser
                 }
                 if (this.isHeaderSetted())
                 {
-                    this.parseHeader();
+                    if (useCache && headerCache.TryGetValue(this.header.cacheCode(), out uaCache))
+                        userAgent = uaCache;
+                    else
+                        this.parseHeader();
                 }
                 if (this.ip != "")
                 {                    
@@ -240,12 +249,21 @@ namespace Udger.Parser
         {
             int client_id = 0;
             int client_class_id = -1;
-            int os_id = 0;
+            int os_id = 0;         
+            string headerForCache = "";
+
+            if (this.useCache)
+            {
+                headerForCache = this.header.cacheCode();
+            }
 
             if (userAgent.UaClassCode != "crawler")
             {
                 this.processSecCH(ref client_id, ref client_class_id, ref os_id);
             }
+            //set cache
+            if (this.useCache && headerForCache != "")
+                headerCache.Set(headerForCache, this.userAgent);
         }
         private void parseIP(string _ip)
         {
