@@ -148,8 +148,9 @@ namespace Udger.Parser
 
         public void setHeader(string headerStr)
         {
+            string[] stringSeparators = new string[] { ": " };
             var rows = headerStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                                .Select(x => new { Key = x.Split(':')[0], Value = x.Split(':')[1] }).ToArray();
+                                .Select(x => new { Key = x.Split(stringSeparators, StringSplitOptions.None)[0], Value = x.Split(stringSeparators, StringSplitOptions.None)[1] }).ToArray();
 
             header.SecChUa = Array.Find(rows, r => r.Key.ToLower() == "Sec-Ch-Ua".ToLower()) != null ? Array.Find(rows, r => r.Key.ToLower() == "Sec-Ch-Ua".ToLower()).Value.ToString()  :  "" ;
             header.SecChUaFullVersionList = Array.Find(rows, r => r.Key.ToLower() == "sec-ch-ua-full-version-list".ToLower()) != null ? Array.Find(rows, r => r.Key.ToLower() == "sec-ch-ua-full-version-list".ToLower()).Value.ToString() : "";
