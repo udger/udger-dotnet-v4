@@ -32,7 +32,7 @@ namespace ConsoleTest
             //UdgerParser parser = new UdgerParser(5000);
 
             // Set data dir (in this directory is stored data file: udgerdb_v3.dat)
-            // Test data file is available on:  https://github.com/udger/test-data/tree/master/data_v3
+            // Test data file is available on:  https://github.com/udger/test-data/tree/master/data_v4
             // Full data file can be downloaded manually from http://data.udger.com/, but we recommend use udger-updater
             parser.SetDataDir(@"C:\udger");
             // or set data dir and DB filename
