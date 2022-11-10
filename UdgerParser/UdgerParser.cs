@@ -420,7 +420,7 @@ namespace Udger.Parser
                     reg = regConv.Regex;
                     if (reg.IsMatch(regstringSearch))
                     {
-                        var ver = reg.Match(regstringSearch).Value;
+                        var ver = reg.Match(regstringSearch).Groups[1].ToString();
                         string versionMajor;
 
                         if (!String.IsNullOrEmpty(this.header.SecChUaFullVersionList))
