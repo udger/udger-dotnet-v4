@@ -432,7 +432,7 @@ namespace Udger.Parser
                         classId = UdgerParser.ConvertToInt(row["class_id"]);
                         userAgent.UaClass = UdgerParser.ConvertToStr(row["client_classification"]);
                         userAgent.UaClassCode = UdgerParser.ConvertToStr(row["client_classification_code"]);
-                        userAgent.Ua = UdgerParser.ConvertToStr(row["name"]) + reg.Match(regstringSearch).Groups[1].ToString();
+                        userAgent.Ua = $"{UdgerParser.ConvertToStr(row["name"])} {reg.Match(regstringSearch).Groups[1].ToString()}";
                         userAgent.UaVersion = ver;
                         userAgent.UaVersionMajor = versionMajor;
                         userAgent.UaUptodateCurrentVersion = UdgerParser.ConvertToStr(row["uptodate_current_version"]);

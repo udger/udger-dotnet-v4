@@ -22,6 +22,13 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
+            TestByJson jsonTest;
+            /*
+            jsonTest = new TestByJson(@"C:\Users\proko\source\repos\Udger-dotnet-v4-git\test-data\data_v4\test_ua.json");
+            jsonTest.doTest();
+            */
+
+
 
             Udger.Parser.UserAgent a;
             Udger.Parser.IPAddress i;
