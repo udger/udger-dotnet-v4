@@ -23,11 +23,16 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
             TestByJson jsonTest;
-            
-            jsonTest = new TestByJson(@"C:\Users\proko\source\repos\Udger-dotnet-v4-git\test-data\data_v4\test_ua.json");
-            jsonTest.doTest();
-            
 
+            jsonTest = new TestByJson(@"C:\Users\proko\source\repos\Udger-dotnet-v4-git\test-data\data_v4\test_ua.json");
+            var retJson = jsonTest.doTest();
+
+            foreach (var line in retJson)
+            {
+                Console.WriteLine(line);
+            }
+            
+            Console.ReadLine();
 
 
             Udger.Parser.UserAgent a;
