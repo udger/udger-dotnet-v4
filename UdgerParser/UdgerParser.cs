@@ -226,11 +226,13 @@ namespace Udger.Parser
                 if (dt.Connected)
                 {
                     //Client
-                    this.processClient(_userAgent, ref os_id, ref client_id, ref client_class_id);
-                    //OS
-                    this.processOS(_userAgent, ref os_id, client_id);
-                    // device
-                    this.processDevice(_userAgent, ref client_class_id);
+                    if (!this.processClient(_userAgent, ref os_id, ref client_id, ref client_class_id))
+                    {
+                        //OS
+                        this.processOS(_userAgent, ref os_id, client_id);
+                        // device
+                        this.processDevice(_userAgent, ref client_class_id);
+                    }
 
                     if (userAgent.OsFamilyCode != null && userAgent.OsFamilyCode != "" )
                     {
@@ -341,18 +343,22 @@ namespace Udger.Parser
         }
 
 
-        private void processClient(string uaString, ref int os_id, ref int clientId, ref int classId)
+        private bool processClient(string uaString, ref int os_id, ref int clientId, ref int classId)
         {
             string q = String.Format(UdgerSqlQuery.SQL_CRAWLER, uaString);
             DataTable userAgentRs = dt.selectQuery(q);
+            bool isCrawler;
             if (userAgentRs != null && userAgentRs.Rows.Count > 0 )
             {
 
+                isCrawler = true;
                 this.prepareUa(userAgentRs.Rows[0],true, ref clientId, ref classId);
                 classId = 99;
                 clientId = -1;
+                
             }
             else {
+                isCrawler = false;
                 int rowid = this.findIdFromList(uaString, clientWordDetector.findWords(uaString), clientRegstringList);
                 if (rowid != -1)
                 {
@@ -365,6 +371,7 @@ namespace Udger.Parser
                     userAgent.UaClassCode = "unrecognized";
                 }
             }
+            return isCrawler;
         }
 
 

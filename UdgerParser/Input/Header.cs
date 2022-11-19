@@ -7,7 +7,7 @@ namespace Udger.Parser.Input
 {
     public class Header
     {
-        [NamePosition(1, Name = "Sec-Ch-Ua")]
+        [NamePosition(1, Name = "Sec-Ch-Ua")]    
         public string SecChUa { get; set; }
 
         [NamePosition(2, Name = "Sec-Ch-Ua-Full-Version-List")]

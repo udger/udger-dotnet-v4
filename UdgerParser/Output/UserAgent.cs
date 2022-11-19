@@ -177,6 +177,38 @@ namespace Udger.Parser
         }
         #endregion
         #region public
+
+        public string Compare(UserAgent toCompare)
+        {
+            string ret = "";
+
+            foreach (var property in toCompare.GetType().GetProperties())
+            {
+                var val1 = property.GetValue(this);
+                var val2 = property.GetValue(toCompare);
+
+                if (val1 != val2)
+                {
+                    if (val1 is string || val2 is string)
+                    {
+                        string val1s = "";
+                        if (val1 != null)
+                            val1s = val1.ToString();
+
+                        string val2s = "";
+                        if (val2 != null)
+                            val2s = val2.ToString();
+
+                        if (val1s != val2s)
+                            ret += $"Property {property.Name}  - {val1} and {val2} are different" + System.Environment.NewLine;
+                    }
+                    else
+                        ret += $"Property {property.Name}  - {val1} and {val2} are different" + System.Environment.NewLine;
+                }
+             
+            }
+            return ret;
+        }
         #endregion
     }
 }
