@@ -58,6 +58,8 @@ namespace ConsoleTest
                 var result = json.Deserialize<List<JObject>>(reader);
                 var ts  = result.Values("test");
                 var ret = result.Values("ret").GetEnumerator() ;
+
+                int count = 0;
                 foreach (var test in ts)
                 {
                     //var h = test.Select(t => new Header() { SecChUa = t.Value<string>("Sec-Ch-Ua") }).SingleOrDefault();
@@ -72,8 +74,9 @@ namespace ConsoleTest
 
 
                     };
+                    parser.ua = test.Value<string>("User-Agent");
 
-                    
+
                     parser.header = h;
                     parser.parse();
                     
@@ -136,9 +139,9 @@ namespace ConsoleTest
                         UaVersionMajor = r.Value<string>("ua_version_major")
                     };
 
+                    count++;
 
-
-                    listToRet.Add(u.Compare(uToCompare));
+                    listToRet.Add($"{count}{System.Environment.NewLine}{u.Compare(uToCompare)}");
 
                 }
                 reader.Close();

@@ -393,6 +393,7 @@ namespace Udger.Parser
                     }
                 }
             }
+
         }
 
         private void processSecCH(ref int clientId, ref int classId, ref int osid)
@@ -401,17 +402,22 @@ namespace Udger.Parser
             PerlRegExpConverter regConv;
 
             this.userAgent.SecChUa = header.SecChUa;
-            this.userAgent.SecChUaFullVersion = header.SecChUaFullVersion;
-            this.userAgent.SecChUaFullVersionList = header.SecChUaFullVersionList;
-            this.userAgent.SecChUaMobile = header.SecChUaMobile;
+            this.userAgent.SecChUaFullVersion = header.SecChUaFullVersion?.Trim('"');
+            this.userAgent.SecChUaFullVersionList = header.SecChUaFullVersionList;          
             this.userAgent.SecChUaModel = header.SecChUaModel;
-            this.userAgent.SecChUaPlatform = header.SecChUaPlatform;
-            this.userAgent.SecChUaPlatformVersion = header.SecChUaPlatformVersion;
+            this.userAgent.SecChUaPlatform = header.SecChUaPlatform?.Trim('"');
+            this.userAgent.SecChUaPlatformVersion = header.SecChUaPlatformVersion?.Trim('"');
 
             if (String.IsNullOrEmpty(this.header.SecChUaMobile) || this.header.SecChUaMobile == "?0")
+            {
                 this.header.SecChUaMobile = "0";
+            }
             else
+            {
                 this.header.SecChUaMobile = "1";
+            }
+
+            this.userAgent.SecChUaMobile = header.SecChUaMobile;
 
             if (!String.IsNullOrEmpty(this.header.SecChUaFullVersionList) || !String.IsNullOrEmpty(this.header.SecChUa))
             {
@@ -433,13 +439,17 @@ namespace Udger.Parser
                         if (!String.IsNullOrEmpty(this.header.SecChUaFullVersionList))
                             versionMajor = ver.Split('.')[0].ToString();
                         else
-                            versionMajor = String.IsNullOrEmpty(header.SecChUaFullVersion) ? ver : ver.Trim('"');
+                        {
+                            versionMajor = ver;
+                            ver = String.IsNullOrEmpty(header.SecChUaFullVersion) ? ver : header.SecChUaFullVersion.Trim('"');
+                        }
 
                         clientId = UdgerParser.ConvertToInt(row["client_id"]);
                         classId = UdgerParser.ConvertToInt(row["class_id"]);
+                        userAgent.UaString = header.Ua;
                         userAgent.UaClass = UdgerParser.ConvertToStr(row["client_classification"]);
                         userAgent.UaClassCode = UdgerParser.ConvertToStr(row["client_classification_code"]);
-                        userAgent.Ua = $"{UdgerParser.ConvertToStr(row["name"])} {reg.Match(regstringSearch).Groups[1].ToString()}";
+                        userAgent.Ua = $"{UdgerParser.ConvertToStr(row["name"])} {ver}";
                         userAgent.UaVersion = ver;
                         userAgent.UaVersionMajor = versionMajor;
                         userAgent.UaUptodateCurrentVersion = UdgerParser.ConvertToStr(row["uptodate_current_version"]);
