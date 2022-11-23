@@ -233,6 +233,12 @@ namespace Udger.Parser
                         // device
                         this.processDevice(_userAgent, ref client_class_id);
                     }
+                    else
+                    {
+                        //Unrecognized
+                        this.proicessUnrecognizedDevice();
+
+                    }
 
                     if (userAgent.OsFamilyCode != null && userAgent.OsFamilyCode != "" )
                     {
@@ -384,7 +390,7 @@ namespace Udger.Parser
                 this.prepareDevice(devRs.Rows[0], ref classId);
             }
             else {
-                if ( classId != -1)
+                if (classId != -1)
                 {
                     DataTable devRs = dt.selectQuery(String.Format(UdgerSqlQuery.SQL_CLIENT_CLASS, classId.ToString()));
                     if (devRs != null && devRs.Rows.Count > 0)
@@ -392,6 +398,26 @@ namespace Udger.Parser
                         this.prepareDevice(devRs.Rows[0], ref classId);
                     }
                 }
+                else {
+                    DataTable devRs = dt.selectQuery(String.Format(UdgerSqlQuery.SQL_CLIENT_CLASS, 1));
+                    if (devRs != null && devRs.Rows.Count > 0)
+                    {
+                        this.prepareDevice(devRs.Rows[0], ref classId);
+                    }
+
+                }
+
+            }
+
+        }
+
+        private void proicessUnrecognizedDevice()
+        {
+            DataTable devRs = dt.selectQuery(String.Format(UdgerSqlQuery.SQL_DEVICECLASSLIST_CH, 1));
+            DataRow row = devRs.Rows[0];
+            if (row != null)
+            {
+                this.prepareUnrecoginzedDevice(row);
             }
 
         }
@@ -410,14 +436,19 @@ namespace Udger.Parser
 
             if (String.IsNullOrEmpty(this.header.SecChUaMobile) || this.header.SecChUaMobile == "?0")
             {
+                if(String.IsNullOrEmpty(this.header.SecChUaMobile))
+                    this.userAgent.SecChUaMobile = header.SecChUaMobile;
+                else
+                    this.userAgent.SecChUaMobile = "0";
                 this.header.SecChUaMobile = "0";
             }
             else
             {
                 this.header.SecChUaMobile = "1";
+                this.userAgent.SecChUaMobile = header.SecChUaMobile;
             }
+            
 
-            this.userAgent.SecChUaMobile = header.SecChUaMobile;
 
             if (!String.IsNullOrEmpty(this.header.SecChUaFullVersionList) || !String.IsNullOrEmpty(this.header.SecChUa))
             {
@@ -659,6 +690,15 @@ namespace Udger.Parser
             userAgent.DeviceClassIconBig = UdgerParser.ConvertToStr(_row["device_class_icon_big"]);
             userAgent.DeviceClassInfoUrl =  UdgerParser.ConvertToStr(_row["device_class_info_url"]);
 
+        }
+        private void prepareUnrecoginzedDevice(DataRow _row)
+        {
+
+            userAgent.DeviceClass = UdgerParser.ConvertToStr(_row["name"]);
+            userAgent.DeviceClassCode = UdgerParser.ConvertToStr(_row["name_code"]);
+            userAgent.DeviceClassIcon = UdgerParser.ConvertToStr(_row["icon"]);
+            userAgent.DeviceClassIconBig = UdgerParser.ConvertToStr(_row["icon_big"]);
+            userAgent.DeviceClassInfoUrl = @"https://udger.com/resources/ua-list/device-detail?device=" + UdgerParser.ConvertToStr(_row["name"]);
         }
 
         private void prepareIp(DataRow _row)
