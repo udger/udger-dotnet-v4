@@ -34,7 +34,7 @@ namespace ConsoleTest
             // or Create and set LRU Cache capacity
             //UdgerParser parser = new UdgerParser(5000);
 
-            // Set data dir (in this directory is stored data file: udgerdb_v3.dat)
+            // Set data dir (in this directory is stored data file: udgerdb_v4.dat)
             // Test data file is available on:  https://github.com/udger/test-data/tree/master/data_v4
             // Full data file can be downloaded manually from http://data.udger.com/, but we recommend use udger-updater
             parser.SetDataDir(@"C:\udger");

@@ -24,7 +24,7 @@ namespace ConsoleTest
         {
             TestByJson jsonTest;
 
-            jsonTest = new TestByJson(@"C:\Users\proko\source\repos\Udger-dotnet-v4-git\test-data\data_v4\test_ua.json");
+            jsonTest = new TestByJson(@"C:\udger\test_ua.json");
             var retJson = jsonTest.doTest();
 
             foreach (var line in retJson)
@@ -43,12 +43,12 @@ namespace ConsoleTest
             // or Create and set LRU Cache capacity
             //UdgerParser parser = new UdgerParser(5000);
 
-            // Set data dir (in this directory is stored data file: udgerdb_v3.dat)
+            // Set data dir (in this directory is stored data file: udgerdb_v4.dat)
             // Test data file is available on:  https://github.com/udger/test-data/tree/master/data_v4
             // Full data file can be downloaded manually from http://data.udger.com/, but we recommend use udger-updater
             parser.SetDataDir(@"C:\udger");
             // or set data dir and DB filename
-            //parser.SetDataDir(@"C:\udger", "udgerdb_v3-noip.dat ");
+            //parser.SetDataDir(@"C:\udger", "udgerdb_v4-noip.dat ");
 
             // Set user agent and /or IP address
             parser.ua = @"Mozilla/5.0 (compatible; SeznamBot/3.2; +http://fulltext.sblog.cz/)";
